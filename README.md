@@ -21,3 +21,33 @@
 **Итоговая выручка по категории «Аксессуары» (продажи > 10k ₽):** `30 000 ₽`
 
 
+import pandas as pd
+
+# Данные
+orders = pd.DataFrame({
+    'order_id': [101, 102, 103, 104, 105],
+    'item': ['Ноутбук', 'Мышь', 'Клавиатура', 'Монитор', 'Коврик'],
+    'quantity': [2, 10, 5, 1, 15]
+})
+
+catalog = pd.DataFrame({
+    'item': ['Ноутбук', 'Мышь', 'Клавиатура', 'Монитор', 'Наушники'],
+    'price': [60000, 1500, 3000, 20000, 4000],
+    'category': ['Электроника', 'Аксессуары', 'Аксессуары', 'Электроника', 'Аксессуары']
+})
+
+# 1. Объединение
+df_analysis = pd.merge(orders, catalog, on='item', how='left')
+
+# 2. Выручка
+df_analysis['total_sum'] = df_analysis['quantity'] * df_analysis['price']
+
+# 3. Фильтрация
+top_accessories = df_analysis[(df_analysis['category'] == 'Аксессуары') & (df_analysis['total_sum'] > 10000)]
+
+# 4. Расчет итоговой суммы
+total_revenue = top_accessories['total_sum'].sum()
+
+print("Отфильтрованная таблица:")
+print(top_accessories)
+print("\nИтоговая выручка по категории:", total_revenue)
